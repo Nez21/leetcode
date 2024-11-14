@@ -17,10 +17,8 @@ impl Solution {
         true
     }
 
-    pub fn minimized_maximum(n: i32, quantities: Vec<i32>) -> i32 {
-        let max = *quantities.iter().max().unwrap();
-
-        (1..=max)
+    pub fn minimized_maximum(n: i32, quantities: Vec<i32>) -> i32 { 
+        (1..100000)
             .collect::<Vec<_>>()
             .partition_point(|&k| !Self::is_possible(n, k, quantities.clone())) as i32
             + 1
