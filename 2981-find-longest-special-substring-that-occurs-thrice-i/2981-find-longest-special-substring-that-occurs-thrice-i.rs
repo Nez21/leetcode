@@ -1,14 +1,13 @@
 impl Solution {
     pub fn maximum_length(s: String) -> i32 {
         let chars = s.chars().collect::<Vec<char>>();
-        let n = s.len();
 
-        let res = (1..chars.len() - 1)
+        let res = (1..s.len() - 1)
             .collect::<Vec<usize>>()
             .partition_point(|&size| {
                 let mut mark = vec![false; 26];
 
-                for i in 0..n - size + 1 {
+                for i in 0..s.len() - size + 1 {
                     if mark[chars[i] as usize - 'a' as usize] {
                         continue;
                     }
