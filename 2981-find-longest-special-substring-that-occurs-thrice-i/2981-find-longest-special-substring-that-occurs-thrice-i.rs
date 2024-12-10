@@ -23,14 +23,10 @@ impl Solution {
                         if chars[i..i + size].iter().zip(sub_b.iter()).all(|(a, b)| a == b) {
                             count += 1;
                         }
-
+                    
                         if count == 3 {
-                            break;
+                            return true;
                         }
-                    }
-
-                    if count == 3 {
-                        return true;
                     }
 
                     mark[chars[i] as usize - 'a' as usize] = true;
