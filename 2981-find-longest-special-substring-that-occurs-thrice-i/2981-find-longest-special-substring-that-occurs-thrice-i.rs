@@ -5,30 +5,18 @@ impl Solution {
         let res = (1..s.len() - 1)
             .collect::<Vec<usize>>()
             .partition_point(|&size| {
-                let mut mark = vec![false; 26];
+                let mut count = vec![0; 26];
 
                 for i in 0..s.len() - size + 1 {
-                    if mark[chars[i] as usize - 'a' as usize] {
-                        continue;
-                    }
-
                     if !chars[i..i + size].iter().all(|&item| item == chars[i]) {
                         continue;
                     }
 
-                    let mut count = 1;
+                    count[chars[i] as usize - 'a' as usize] += 1;
 
-                    for sub_b in chars[i + 1..].windows(size) {
-                        if chars[i..i + size].iter().zip(sub_b.iter()).all(|(a, b)| a == b) {
-                            count += 1;
-                        }
-                    
-                        if count == 3 {
-                            return true;
-                        }
+                    if count[chars[i] as usize - 'a' as usize] == 3 {
+                        return true
                     }
-
-                    mark[chars[i] as usize - 'a' as usize] = true;
                 }
 
                 false
