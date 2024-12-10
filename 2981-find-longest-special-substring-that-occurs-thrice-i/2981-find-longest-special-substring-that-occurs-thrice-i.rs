@@ -13,26 +13,14 @@ impl Solution {
                         continue;
                     }
 
-                    let mut same = true;
-
-                    for j in i..(i + size) {
-                        if chars[i] != chars[j] {
-                            same = false;
-                            break;
-                        }
-                    }
-
-                    if !same {
+                    if !chars[i..i + size].iter().all(|&item| item == chars[i]) {
                         continue;
                     }
 
                     let mut count = 1;
 
-                    for sub in chars[i + 1..].windows(size) {
-                        if chars[i..i + size]
-                            .iter()
-                            .zip(sub.iter())
-                            .all(|(a, b)| a == b) {
+                    for sub_b in chars[i + 1..].windows(size) {
+                        if chars[i..i + size].iter().zip(sub_b.iter()).all(|(a, b)| a == b) {
                             count += 1;
                         }
 
@@ -51,6 +39,10 @@ impl Solution {
                 false
             }) as i32;
 
-        if res == 0 { -1 } else { res }
+        if res == 0 {
+            -1
+        } else {
+            res
+        }
     }
 }
