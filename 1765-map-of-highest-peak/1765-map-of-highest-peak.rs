@@ -1,49 +1,44 @@
-use std::collections::VecDeque;
-
 impl Solution {
     pub fn highest_peak(mut is_water: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
-        let n = is_water.len();
-        let m = is_water[0].len();
-        let mut height = vec![vec![0; m]; n];
-        let mut queue = VecDeque::<(usize, usize)>::new();
+        let rows = is_water.len();    
+        let cols = is_water[0].len();
 
-        for i in 0..n {
-            for j in 0..m {
-                if is_water[i][j] == 1 {
-                    queue.push_back((i, j));
+        let mut h = vec![vec![false; cols]; rows];
+        let mut cur = vec![];
+
+        for r in 0..rows {
+            for c in 0..cols {
+                if is_water[r][c] == 1 {
+                    h[r][c] = true;
+                    cur.push((r, c));
                 }
             }
         }
-
-        if queue.is_empty() {
-            queue.push_back((0, 0));
-            height[0][0] = 1;
-        }
-
-        const DIRECTIONS: [(isize, isize); 4] = [(0, -1), (0, 1), (-1, 0), (1, 0)];
-
-        while let Some((x, y)) = queue.pop_front() {
-            for (dx, dy) in DIRECTIONS {
-                let tu = x as isize + dx;
-                let tv = y as isize + dy;
-
-                if tu < 0 || tv < 0 || tu >= n as isize || tv >= m as isize {
-                    continue;
+        let dir = &[(0, 1), (0, -1), (1, 0), (-1, 0)];
+        let mut gen = vec![];
+        let mut level = 0;
+        
+        while !cur.is_empty() {
+            for &(r, c) in &cur {
+                is_water[r][c] = level;
+                for (dr, dc) in dir {
+                    let nr = r as i32 + dr;
+                    let nc = c as i32 + dc;
+                    if (0..rows as i32).contains(&nr) && (0..cols as i32).contains(&nc) {
+                        let (nr, nc) = (nr as usize, nc as usize);
+                        if !h[nr][nc] {
+                            h[nr][nc] = true;
+                            gen.push((nr, nc));
+                        }
+                    }
                 }
-
-                let u = tu as usize;
-                let v = tv as usize;
-
-                if is_water[u][v] != 0 {
-                    continue;
-                }
-
-                is_water[u][v] = -1;
-                height[u][v] = height[x][y] + 1;
-                queue.push_back((u, v));
             }
+
+            level += 1;
+            cur.clear();
+            std::mem::swap(&mut cur, &mut gen);
         }
 
-        height
+        is_water
     }
 }
