@@ -17,32 +17,32 @@
 //   }
 // } 
 
-struct FindElements {
-    tree: Vec<Option<usize>>,
-}
-
+use std::collections::HashSet;
 use std::{cell::RefCell, rc::Rc};
+
+struct FindElements {
+    included: HashSet<usize>,
+}
 
 impl FindElements {
     fn new(root: Option<Rc<RefCell<TreeNode>>>) -> Self {
         let mut stack = vec![(root, 0)];
-        let mut tree = vec![None; 10000000];
+        let mut included = HashSet::<usize>::new();
 
         while let Some((node_option, index)) = stack.pop() {
             if let Some(node_rc) = node_option {
                 let node = node_rc.borrow();
 
-                tree[index] = Some(index);
-
+                included.insert(index);
                 stack.push((node.left.clone(), 2 * index + 1));
                 stack.push((node.right.clone(), 2 * index + 2));
             }
         }
 
-        Self { tree }
+        Self { included }
     }
 
     fn find(&self, target: i32) -> bool {
-        (target as usize) < self.tree.len() && self.tree[target as usize].is_some()
+        self.included.contains(&(target as usize))
     }
 }
