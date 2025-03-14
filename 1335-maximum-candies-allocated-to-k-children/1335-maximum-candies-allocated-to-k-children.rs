@@ -6,9 +6,20 @@ impl Solution {
             return 0;
         }
 
-        (1..=(sum / k))
-            .collect::<Vec<_>>()
-            .partition_point(|q| candies.iter().fold(0, |acc, el| acc + *el as i64 / *q) >= k)
-            as i32
+        let mut l = 1;
+        let mut r = sum / k;
+
+        while l < r {
+            let m = (l + r + 1) / 2;
+
+            if candies.iter().fold(0, |acc, el| acc + *el as i64 / m) >= k {
+                l = m;
+            } else {
+                r = m - 1;
+            }
+        }
+
+        l as i32
     }
+
 }
