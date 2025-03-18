@@ -6,12 +6,12 @@ impl Solution {
         let mut max = 1;
 
         for r in 1..n {
-            while sum + nums[r] != sum | nums[r] && l < r {
-                sum -= nums[l];
+            while sum & nums[r] != 0 && l < r {
+                sum ^= nums[l];
                 l += 1;
             }
 
-            sum += nums[r];
+            sum |= nums[r];
             max = max.max(r - l + 1);
         }
 
